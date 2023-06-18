@@ -6,12 +6,12 @@ const Alert: React.FC<Props> = ({status, message})=>{
     switch (status){
     case "error":{
         color = "red";
-        warning = "Place was not found!"
+        warning = "City was not found!"
         break;
     }
     case "warning":{
        color = "yellow";
-       warning = "There are more then 2 similar results!"
+       warning = "There are several similar results!"
         break;
     }
 }

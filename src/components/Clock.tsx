@@ -43,5 +43,5 @@ export default Clock;
 
 function timeFromZone(city: string): TimeZone[] {
     const array: TimeZone[] = timeZones;
-    return array.filter(zone => zone.mainCities.includes(city));
+    return array.filter(zone => zone.mainCities.includes(city) || zone.countryName.includes(city));
 }
