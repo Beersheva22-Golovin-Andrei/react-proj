@@ -1,6 +1,6 @@
 import Clocks from "./components/Clocks";
 
 const App: React.FC = ()=>{
-return <Clocks/>
-}
+return <Clocks/>}
+
 export default App;
