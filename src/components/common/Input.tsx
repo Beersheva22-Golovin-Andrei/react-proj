@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
-import InputResult from "../../model/InputResult";
 import Alert from "./Alert";
+import InputResult from "../../model/InputResult";
+
 
 type Props = {
     submitFn: (inputText: string) => InputResult;
@@ -9,7 +10,7 @@ type Props = {
     type?: string;
 }
 
-const Input: React.FC<Props> = ({ submitFn, placeHolder, buttonTitle, type }) => {
+const Input: React.FC<Props> = ({submitFn, placeHolder, buttonTitle, type}) => {
     const inputElementRef = useRef<HTMLInputElement>(null);
     const [disabled, setDisabled] = useState<boolean>(true);
     const [message, setMessage] = useState<string>("");
@@ -28,7 +29,8 @@ const Input: React.FC<Props> = ({ submitFn, placeHolder, buttonTitle, type }) =>
     return <div>
         <input type={type || "text"} placeholder={placeHolder} ref={inputElementRef} onChange={onChangeFn}/>
         <button onClick={onClickFn} disabled={disabled}>{buttonTitle || 'Go'}</button>
-        {/* {message && <Alert status={status} message={message} />} */}
+        {message && <Alert status={status} message={message} />}
     </div>
+
 }
 export default Input;

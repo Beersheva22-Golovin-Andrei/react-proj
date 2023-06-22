@@ -1,0 +1,5 @@
+{
+    "signedInAdmin": [0, 2, 3, 4, 6],
+    "signedInUser":[0, 4, 5, 6],
+    "signedOut": [0, 1]
+}
