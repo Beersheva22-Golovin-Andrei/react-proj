@@ -28,7 +28,7 @@ const Input: React.FC<Props> = ({ submitFn, placeHolder, buttonTitle, type }) =>
     return <div>
         <input type={type || "text"} placeholder={placeHolder} ref={inputElementRef} onChange={onChangeFn}/>
         <button onClick={onClickFn} disabled={disabled}>{buttonTitle || 'Go'}</button>
-        {message && <Alert status={status} message={message} />}
+        {/* {message && <Alert status={status} message={message} />} */}
     </div>
 }
 export default Input;
