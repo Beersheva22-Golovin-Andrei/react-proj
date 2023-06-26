@@ -9,6 +9,7 @@ import Customers from "./components/pages/Customers";
 import Navigator from "./components/navigators/Navigator"
 import './App.css'
 import { useState } from "react";
+import NotFound from "./components/pages/NotFound";
 
 const App: React.FC = () => {
   const [logedRole, setLogedRole] = useState<string>("signedOut");
@@ -19,6 +20,9 @@ return <BrowserRouter>
       <Route path="customers" element={<Customers/>}/>
       <Route path="products" element={<Products/>}/>
       <Route path="orders" element={<Orders/>}/>
+
+      <Route path="notfound" element={<NotFound/>}/>
+
       <Route path="shoppingCart" element={<ShoppingCart/>}/>
       <Route path="signIn" element={<SignIn logInFn={function(login:string):void {
           let resRole = 'signedInUser'
@@ -32,6 +36,7 @@ return <BrowserRouter>
       <Route path="signOut" element={<SignOut logOutFn={function():void{
           setLogedRole('signedOut');
       }}/>}/>
+      <Route path="/*" element ={<NotFound></NotFound>}/>
     </Route>
   </Routes>
   </BrowserRouter>
