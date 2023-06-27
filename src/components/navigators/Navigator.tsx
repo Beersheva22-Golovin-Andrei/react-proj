@@ -1,9 +1,10 @@
-import {Outlet, useLocation, useNavigate } from "react-router-dom"
+import {Link, Outlet, useLocation, useNavigate } from "react-router-dom"
 import rolesConfig from "../../config/roles-config.json";
 import accesConfig from "../../config/acces-config.json";
 import NavigatorItem from "./NavigatorItem";
-import { useEffect } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import NotFound from "../pages/NotFound";
+import { AppBar, Box, Tab, Tabs } from "@mui/material";
 
 
 type Props = {role:string };
@@ -11,13 +12,18 @@ type Props = {role:string };
 const Navigator: React.FC<Props> = ({role})=> {
     const navigate = useNavigate();
     const location = useLocation();
+    const [value, setValue] = useState(0);
     const pages = rolesConfig.allPages;
     const accsessSet:number[] = accesConfig[role as 'signedInAdmin'|'signedOut'| 'signedInUser'];
+    const activePagesForRole: any[] = accsessSet.map(index=>pages[index]);
     useEffect(()=>{
         if (!pages.find((page)=>page.to===location.pathname)){
-            navigate('/notfound')
-        } else navigate('/');
-
+            navigate('/notfound');
+            //setValue('/notfound')
+        } else {
+            navigate('/');
+            setValue(0);
+        }
         // if (!accsessSet.map(index=>pages[index]).find((page)=>page.to===location.pathname) ){
         //     navigate(location.pathname)
 
@@ -27,17 +33,23 @@ const Navigator: React.FC<Props> = ({role})=> {
         // navigate('/')
         
     }, [role]);
-    
+    function onChangeFn (event: any, newValue: any) {
+        setValue(newValue);
+    }
+
+    function getTabs(): ReactNode{
+        return activePagesForRole.map(r=><Tab component={Link} to={r.to} label={r.name} key={r.name}/>);
+    }
 
 
-    return <div>
-        <nav>
-            <ul className="navigator-list">
-                {accsessSet.map(index => <NavigatorItem to={pages[index].to} name={pages[index].name}/>)}
-            </ul>
-        </nav>
+    return <Box mt={10}>
+        <AppBar sx={{backgroundColor: "grey"}}>
+            <Tabs value={value} onChange={onChangeFn}>
+                {getTabs()}
+            </Tabs>
+        </AppBar>
         <Outlet></Outlet>
-    </div>
+    </Box>
 }
 
 

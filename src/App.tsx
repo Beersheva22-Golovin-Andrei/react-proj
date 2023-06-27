@@ -10,19 +10,18 @@ import Navigator from "./components/navigators/Navigator"
 import './App.css'
 import { useState } from "react";
 import NotFound from "./components/pages/NotFound";
+import NavigatorDispatcher from "./components/navigators/NavigatorDispatcher";
 
 const App: React.FC = () => {
   const [logedRole, setLogedRole] = useState<string>("signedOut");
 return <BrowserRouter> 
 <Routes>
-    <Route path="/" element={<Navigator role={logedRole}/>}>
+    <Route path="/" element={<NavigatorDispatcher role={logedRole}/>}>
       <Route index element={<Home/>}/>
       <Route path="customers" element={<Customers/>}/>
       <Route path="products" element={<Products/>}/>
       <Route path="orders" element={<Orders/>}/>
-
       <Route path="notfound" element={<NotFound/>}/>
-
       <Route path="shoppingCart" element={<ShoppingCart/>}/>
       <Route path="signIn" element={<SignIn logInFn={function(login:string):void {
           let resRole = 'signedInUser'
