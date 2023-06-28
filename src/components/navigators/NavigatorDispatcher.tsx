@@ -3,7 +3,7 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import Navigator from "./Navigator";
 import NavigatorPortrait from "./NavigatorPortrait";
 
-type Props = {role:string };
+type Props = {role:string | null };
 
 const NavigatorDispatcher: React.FC<Props>= ({role}) => {
     const theme = useTheme();

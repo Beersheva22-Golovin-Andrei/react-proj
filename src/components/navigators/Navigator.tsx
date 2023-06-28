@@ -7,14 +7,15 @@ import NotFound from "../pages/NotFound";
 import { AppBar, Box, Tab, Tabs } from "@mui/material";
 
 
-type Props = {role:string };
+type Props = {role:string | null };
 
 const Navigator: React.FC<Props> = ({role})=> {
     const navigate = useNavigate();
     const location = useLocation();
     const [value, setValue] = useState(0);
     const pages = rolesConfig.allPages;
-    const accsessSet:number[] = accesConfig[role as 'signedInAdmin'|'signedOut'| 'signedInUser'];
+   
+    const accsessSet:number[] = accesConfig[role as 'admin'| 'user' | 'signedOut'];
     const activePagesForRole: any[] = accsessSet.map(index=>pages[index]);
     useEffect(()=>{
         if (!pages.find((page)=>page.to===location.pathname)){

@@ -4,14 +4,14 @@ import rolesConfig from "../../config/roles-config.json";
 import accesConfig from "../../config/acces-config.json";
 import { Link } from "@mui/icons-material";
 
-type Prop = {role:string};
+type Prop = {role:string | null};
 const drawerWidth = 240;
 
 
 const NavigatorPortrait: React.FC<Prop> = ({role}) => {
 
     const pages = rolesConfig.allPages;
-    const accsessSet:number[] = accesConfig[role as 'signedInAdmin'|'signedOut'| 'signedInUser'];
+    const accsessSet:number[] = accesConfig[role as 'admin'|'signedOut'| 'user'];
     const activePagesForRole: any[] = accsessSet.map(index=>pages[index]);
     const [activeValue, setValue] = React.useState(0);
     const [mobileOpen, setMobileOpen] = React.useState(false);

@@ -1,18 +1,24 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import InputResult from "../../model/InputResult";
 import Input from "../common/Input";
+import AuthServiceJwt from "../../service/AuthServiceJwt";
+import getSignInForm from "../forms/SignInForm";
+import { useDispatch } from "react-redux";
+import { authActions } from "../../redux/slices/authSlice";
+const URL_LOGIN = "http://localhost:3500/login";
+const authService = new AuthServiceJwt(URL_LOGIN);
 
 
-type Params = {
-    logInFn: (login: string) => void;
+const SignIn: React.FC = ()=> {
+    const dispatch = useDispatch();
+return getSignInForm(async (data)=>{
+    const newUserData = await authService.login(data);
+    if (newUserData!=null){
+        dispatch(authActions.set(newUserData));
+    } else {
+        alert("Login or password is incorrect")
+    }
+})
 }
-const SignIn: React.FC<Params> = ({logInFn})=> {
-return <p className="component-logo">
-            <Input submitFn={function (login: string): InputResult {
-                let resObj:InputResult = {status: "success", message: login};
-                logInFn(login);
-                return resObj;
-            }} type="text" placeHolder={"Enter login"} buttonTitle="Sign In" />
-</p>
-}
+
 export default SignIn;
