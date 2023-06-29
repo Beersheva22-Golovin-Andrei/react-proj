@@ -8,8 +8,6 @@ export const store = configureStore({
      authState: authReducer
     }
 });
-
 export function useSelectorAuth() {
     return useSelector<any, UserData>(state => state.authState.userData);
-    
 }

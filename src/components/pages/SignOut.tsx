@@ -1,10 +1,8 @@
-import { useDispatch } from "react-redux";
-import { authActions } from "../../redux/slices/authSlice";
-
-
-const SignOut: React.FC = ()=>{
+import {useDispatch} from 'react-redux';
+import { authActions } from '../../redux/slices/authSlice';
+const SignOut: React.FC = () => {
     const dispatch = useDispatch();
-    dispatch(authActions.reset());
-return <p className="component-logo">SignOut component</p>
+    return <button onClick={() => dispatch(authActions.reset())}>confirm sign out</button>
 }
-export default SignOut;
+ 
+ export default SignOut;

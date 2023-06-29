@@ -1,32 +1,19 @@
-type Props = {status: string, message: string}
+import { CSSProperties } from "react";
+import { StatusType } from "../../model/StatusType";
 
-const Alert: React.FC<Props> = ({status, message})=>{
-    let color: string = "green";
-    let warning: string = "";
-    switch (status){
-    case "error":{
-        color = "red";
-        warning = "City was not found!"
-        break;
-    }
-    case "warning":{
-       color = "yellow";
-       warning = "There are several similar results!"
-        break;
-    }
+type Props = {
+    status: StatusType;
+    message: string;
 }
-const style: React.CSSProperties = {
-    color: color
-}
-
+const statusProps: Map<StatusType,CSSProperties> = new Map([
+   ["error",{backgroundColor: "lightpink"}],
+   ["success",{backgroundColor: "lightgreen"}],
+   ["warning", {backgroundColor: "yellow"}],
+   
+])
+const Alert: React.FC<Props> = ({status, message}) => {
     return <div>
-        <p>
-            <span style={style}>{message}</span>
-            <p>
-                <span style={style}>{warning}</span>
-            </p>
-        </p>
+        <p style={statusProps.get(status)}>{message}</p>
     </div>
 }
-
 export default Alert;

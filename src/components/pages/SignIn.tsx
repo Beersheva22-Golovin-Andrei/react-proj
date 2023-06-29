@@ -1,24 +1,19 @@
-import { useEffect, useState } from "react";
-import InputResult from "../../model/InputResult";
-import Input from "../common/Input";
-import AuthServiceJwt from "../../service/AuthServiceJwt";
-import getSignInForm from "../forms/SignInForm";
 import { useDispatch } from "react-redux";
+import Input from "../common/Input";
+import InputResult from "../../model/InputResult";
 import { authActions } from "../../redux/slices/authSlice";
-const URL_LOGIN = "http://localhost:3500/login";
-const authService = new AuthServiceJwt(URL_LOGIN);
-
-
-const SignIn: React.FC = ()=> {
+import LoginData from "../../model/LoginData";
+import { authService } from "../../config/service-config";
+import UserData from "../../model/UserData";
+import SignInForm from "../forms/SignInForm";
+const SignIn: React.FC = () => {
     const dispatch = useDispatch();
-return getSignInForm(async (data)=>{
-    const newUserData = await authService.login(data);
-    if (newUserData!=null){
-        dispatch(authActions.set(newUserData));
-    } else {
-        alert("Login or password is incorrect")
+    async function submitFn(loginData: LoginData): Promise<InputResult> {
+        const res: UserData = await authService.login(loginData);
+        res && dispatch(authActions.set(res));
+        return {status: res ? 'success' : 'error',
+         message: res ? '' : 'Incorrect Credentials'}
     }
-})
+    return <SignInForm submitFn={submitFn}/>
 }
-
-export default SignIn;
+ export default SignIn;

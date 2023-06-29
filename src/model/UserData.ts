@@ -1,3 +1,5 @@
-type UserData = {role: string, email: string}
-
+type UserData = {
+    email: string;
+    role: string;
+} | null
 export default UserData;

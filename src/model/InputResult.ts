@@ -1,3 +1,7 @@
-type InputResult = {status: "error"|"success"|"warning", message?: string}
+import { StatusType } from "./StatusType";
 
+type InputResult = {
+    status: StatusType;
+    message?: string
+}
 export default InputResult;

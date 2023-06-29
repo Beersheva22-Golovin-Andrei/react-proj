@@ -1,35 +1,33 @@
-import { useDispatch } from "react-redux";
+import LoginData from "../model/LoginData";
 import UserData from "../model/UserData";
 import AuthService from "./AuthService";
-import { authActions } from "../redux/slices/authSlice";
+export const AUTH_DATA_JWT = 'auth-data-jwt';
 
+function getUserData(data: any): UserData {
+    const jwt = data.accessToken;
+    localStorage.setItem(AUTH_DATA_JWT, jwt)
+    const jwtPayloadJSON = atob(jwt.split('.')[1]);
+    const jwtPayloadObj = JSON.parse(jwtPayloadJSON);
+    return {email: jwtPayloadObj.email, role: jwtPayloadObj.sub}
+
+}
 export default class AuthServiceJwt implements AuthService {
+    
+    constructor(private url: string){}
 
-    constructor (private _url: string){
-    }
-
-    async login(data: { email: string; password: string; }): Promise<any> {
-          const response = await fetch(this._url, {
-        method: "POST",
+    async login(loginData: LoginData): Promise<UserData > {
+       const response = await fetch(this.url, {
+        method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify(data)
-    });
-    const authResponse = await response.json();
-    let result;
-    if (response.status == 200) {
-    const payloadJson =atob(authResponse.accessToken.split('.')[1]);
-    const userData = JSON.parse(payloadJson);
-    const email = userData.email;
-    const role = userData.sub;
-    result = {email, role};
+        body: JSON.stringify(loginData)
+       });
+       
+        return response.ok ? getUserData(await response.json()) : null;
     }
-        return result;
+    async logout(): Promise<void> {
+       localStorage.removeItem(AUTH_DATA_JWT);
     }
-
-    async logOut(logOutFn: ()=>void): Promise<void> {
-        logOutFn();
-        return new Promise(()=>null);
-    }
+    
 }

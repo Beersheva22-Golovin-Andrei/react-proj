@@ -1,58 +1,34 @@
-import {Link, Outlet, useLocation, useNavigate } from "react-router-dom"
-import rolesConfig from "../../config/roles-config.json";
-import accesConfig from "../../config/acces-config.json";
-import NavigatorItem from "./NavigatorItem";
-import { ReactNode, useEffect, useState } from "react";
-import NotFound from "../pages/NotFound";
-import { AppBar, Box, Tab, Tabs } from "@mui/material";
-
-
-type Props = {role:string | null };
-
-const Navigator: React.FC<Props> = ({role})=> {
+import { AppBar, Box, Tab, Tabs } from '@mui/material';
+import { ReactNode, useEffect, useState } from 'react';
+import { Link, NavLink, Outlet, useLocation, useNavigate} from 'react-router-dom'
+export type RouteType = {
+    to: string, label: string
+}
+const Navigator: React.FC<{ routes: RouteType[] }> = ({routes}) => {
     const navigate = useNavigate();
     const location = useLocation();
     const [value, setValue] = useState(0);
-    const pages = rolesConfig.allPages;
-   
-    const accsessSet:number[] = accesConfig[role as 'admin'| 'user' | 'signedOut'];
-    const activePagesForRole: any[] = accsessSet.map(index=>pages[index]);
-    useEffect(()=>{
-        if (!pages.find((page)=>page.to===location.pathname)){
-            navigate('/notfound');
-            //setValue('/notfound')
-        } else {
-            navigate('/');
-            setValue(0);
+    useEffect(() => {
+        let index = routes.findIndex(r => r.to === location.pathname);
+        if (index < 0) {
+            index = 0;
         }
-        // if (!accsessSet.map(index=>pages[index]).find((page)=>page.to===location.pathname) ){
-        //     navigate(location.pathname)
-
-        // } else if (!pages.find((page)=>page.to===location.pathname)){
-        //     navigate('/notfound')
-        // } 
-        // navigate('/')
-        
-    }, [role]);
-    function onChangeFn (event: any, newValue: any) {
+        navigate(routes[index].to);
+        setValue(index);
+    }, [routes])
+    function onChangeFn(event: any, newValue: number) {
         setValue(newValue);
     }
-
-    function getTabs(): ReactNode{
-        return activePagesForRole.map(r=><Tab component={Link} to={r.to} label={r.name} key={r.name}/>);
+    function getTabs(): ReactNode {
+        return routes.map(r => <Tab component={NavLink} to={r.to} label={r.label} key={r.label}/>)
     }
-
-
     return <Box mt={10}>
-        <AppBar sx={{backgroundColor: "grey"}}>
+       <AppBar sx={{backgroundColor:"lightgray"}}> 
             <Tabs value={value} onChange={onChangeFn}>
                 {getTabs()}
             </Tabs>
-        </AppBar>
+        </AppBar> 
         <Outlet></Outlet>
     </Box>
 }
-
-
-
 export default Navigator;
