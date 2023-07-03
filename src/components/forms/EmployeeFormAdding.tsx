@@ -6,12 +6,10 @@ import employeeConfig from "../../config/employee-config.json"
 import Employee from '../../model/Employee';
 import Alert from '../common/Alert';
 import { StatusType } from '../../model/StatusType';
-import { useEffect, useRef } from 'react';
+import { useRef } from 'react';
 
 
 const { minSalary, maxSalary, maxYear, minYear, departments } = employeeConfig;
-
-
 type Params = { submitFn: (empl: Employee) => Promise<Employee | null> };
 
 const EmployeeAddingForm: React.FC<Params> = ({ submitFn }) => {
@@ -51,7 +49,7 @@ const EmployeeAddingForm: React.FC<Params> = ({ submitFn }) => {
     inputElementRef.current.reset();
     setDepart('');
 
-   ;
+    ;
   };
 
   return <Typography>
@@ -70,6 +68,8 @@ const EmployeeAddingForm: React.FC<Params> = ({ submitFn }) => {
           id="name-fieled"
           label="Name"
           name="name"
+          type='text'
+          helperText="enter Employee's name"
         />
         <TextField
           required
@@ -77,6 +77,8 @@ const EmployeeAddingForm: React.FC<Params> = ({ submitFn }) => {
           label="Salary"
           name="salary"
           type='number'
+          helperText="enter salary"
+          inputProps={{ min: `${minSalary}`, max: `${maxSalary}` }}
         />
         <TextField
           required
@@ -84,6 +86,8 @@ const EmployeeAddingForm: React.FC<Params> = ({ submitFn }) => {
           label="Date of birth"
           type="date"
           name="birthDate"
+          helperText="enter Employee's birth date"
+          inputProps={{ min: `${minYear}-01-01`, max: `${maxYear}-12-31` }}
         />
 
       </div>
