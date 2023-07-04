@@ -2,7 +2,6 @@ import { configureStore } from "@reduxjs/toolkit";
 import { authReducer } from "./slices/authSlice";
 import { useSelector } from "react-redux";
 import UserData from "../model/UserData";
-import CodeType from "../model/CodeType";
 import { codeReducer } from "./slices/codeSlice";
 import CodePayload from "../model/CodePayload";
 

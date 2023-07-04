@@ -1,4 +1,4 @@
-import {Dialog} from '@mui/material';
+import {Box, Dialog} from '@mui/material';
 
 type Props = {
 
