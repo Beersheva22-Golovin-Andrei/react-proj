@@ -2,12 +2,34 @@ import { Observable } from "rxjs";
 import Employee from "../model/Employee";
 import { AUTH_DATA_JWT } from "./AuthServiceJwt";
 import EmployeesService from "./EmployeesService";
-import { subscribe } from "diagnostics_channel";
-import { resolve } from "path";
+
 
 export default class EmployeesServiceRest implements EmployeesService{
     
     constructor(private _url: string){}
+    
+    async updateEmployee(empl:Employee): Promise<Employee | null> {
+        let responseText = '';
+        try {
+            const response = await fetch(`${this._url}/${empl.id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${localStorage.getItem(AUTH_DATA_JWT) || ''}`
+                },
+                body: JSON.stringify({ ...empl, userId: 'admin' })
+            });
+            if (!response.ok) {
+                const { status, statusText } = response;
+                responseText = status == 401 || status == 403 ? 'Authentication' : statusText;
+                throw responseText;
+            }
+            return await response.json();
+        } catch (error: any) {
+            throw responseText ? responseText : "Server is unavailable. Repeat later on";
+        }
+
+    }
 
     async deleteEmployee(id: any): Promise<void> {
         let responseText = '';
