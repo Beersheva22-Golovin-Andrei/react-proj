@@ -12,7 +12,7 @@ export default class EmployeesServiceRest implements EmployeesService{
     async deleteEmployee(id: any): Promise<void> {
         let responseText = '';
         try {
-            const response = await fetch(this._url+id, {
+            const response = await fetch(`${this._url}/${id}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
