@@ -9,6 +9,27 @@ export default class EmployeesServiceRest implements EmployeesService{
     
     constructor(private _url: string){}
 
+    async deleteEmployee(id: any): Promise<void> {
+        let responseText = '';
+        try {
+            const response = await fetch(this._url+id, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${localStorage.getItem(AUTH_DATA_JWT) || ''}`
+                }
+            });
+            if (!response.ok) {
+                const { status, statusText } = response;
+                responseText = status == 401 || status == 403 ? 'Authentication' : statusText;
+                throw responseText;
+            }
+            } catch (error: any) {
+            throw responseText ? responseText : "Server is unavailable. Repeat later on";
+        }
+
+    }
+
     async addEmployee(empl: Employee): Promise<Employee | null> {
         let res = null;
         try{
