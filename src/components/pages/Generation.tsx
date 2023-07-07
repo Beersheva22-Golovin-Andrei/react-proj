@@ -6,7 +6,7 @@ import Employee from "../../model/Employee";
 import emplConfig from "../../config/employee-config.json"
 import { StatusType } from "../../model/StatusType";
 
-const { minSalary, maxSalary, maxYear, minYear, departments } = emplConfig;
+const { minSalary, maxSalary, maxYear, minYear, departments, salaryStatisticIntervals} = emplConfig;
 
 const Generation: React.FC = () => {
     return <Typography variant="h4" align="center">

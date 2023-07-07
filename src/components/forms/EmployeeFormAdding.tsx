@@ -10,10 +10,11 @@ import { useRef } from 'react';
 
 
 const { minSalary, maxSalary, maxYear, minYear, departments } = employeeConfig;
-type Params = { submitFn: (empl: Employee) => Promise<Employee | null> };
+type Params = { submitFn: (empl: Employee) => Promise<Employee | null>,
+firstCond?: Employee };
 
-const EmployeeAddingForm: React.FC<Params> = ({ submitFn }) => {
-  const [department, setDepart] = React.useState('');
+const EmployeeAddingForm: React.FC<Params> = ({ submitFn, firstCond }) => {
+  const [department, setDepart] = React.useState(firstCond!=undefined ? firstCond.department: "");
   const [statusResult, setStatus] = React.useState<StatusType>();
   const [message, setMessage] = React.useState<string>();
   const inputElementRef = useRef<any>(null);
@@ -39,12 +40,13 @@ const EmployeeAddingForm: React.FC<Params> = ({ submitFn }) => {
     const birthDate: Date = new Date(data.get('birthDate') as string);
     const gender: 'male' | 'female' = data.get('gender') as 'male' | 'female';
     const res: Employee | null = await submitFn({ name, birthDate, department, salary, gender })
+    const actionName:string = firstCond==undefined? 'added':'updated'
     if (res == null) {
       setStatus("error")
       setMessage("Employee can not be added!")
     } else {
       setStatus("success");
-      setMessage(`New empolyee has been added with id= ${res.id}`)
+      setMessage(`New empolyee has been ${actionName} with id= ${res.id}`)
     }
     inputElementRef.current.reset();
     setDepart('');
@@ -70,6 +72,7 @@ const EmployeeAddingForm: React.FC<Params> = ({ submitFn }) => {
           name="name"
           type='text'
           helperText="enter Employee's name"
+          value={firstCond?.name}
         />
         <TextField
           required
@@ -78,6 +81,7 @@ const EmployeeAddingForm: React.FC<Params> = ({ submitFn }) => {
           name="salary"
           type='number'
           helperText="enter salary"
+          defaultValue={firstCond?.salary}
           inputProps={{ min: `${minSalary}`, max: `${maxSalary}` }}
         />
         <TextField
@@ -86,6 +90,7 @@ const EmployeeAddingForm: React.FC<Params> = ({ submitFn }) => {
           label="Date of birth"
           type="date"
           name="birthDate"
+          value={firstCond?.birthDate}
           helperText="enter Employee's birth date"
           inputProps={{ min: `${minYear}-01-01`, max: `${maxYear}-12-31` }}
         />
@@ -97,6 +102,7 @@ const EmployeeAddingForm: React.FC<Params> = ({ submitFn }) => {
           <RadioGroup
             aria-labelledby="demo-radio-buttons-group-label"
             name="radio-buttons-group"
+            value={firstCond?.gender}
           >
             <FormControlLabel value="female" control={<Radio />} label="Female" name="gender" />
             <FormControlLabel value="male" control={<Radio />} label="Male" name="gender" />

@@ -20,6 +20,7 @@ const Employees: React.FC = () => {
     const [openConfirm, setOpenConfirm] = useState<boolean>(false);
     const [openUpdate, setOpenUpdate] = useState<boolean>(false);
     const idForDeleting = useRef<any>(null);
+    const firstCond = useRef<any>(null);
 
     async function deleteFn() {
         try {
@@ -51,7 +52,8 @@ const Employees: React.FC = () => {
         setOpenConfirm(true);
     }
 
-    function updateHandle(id: any): void {
+    function updateHandle(row: any): void {
+        firstCond.current = row as Employee;
         setOpenUpdate(true);
     }
 
@@ -70,7 +72,7 @@ const Employees: React.FC = () => {
                 field: 'actions', type: 'actions',
                 getActions: (params: GridRowParams) => {
                     return [<GridActionsCellItem icon={<GridDeleteForeverIcon />} onClick={() => deleteHandle(params.id)} label="Delete" />,
-                    <GridActionsCellItem icon={<GridDragIcon />} onClick={() => updateHandle(params.id)} label="Update" />]
+                    <GridActionsCellItem icon={<GridDragIcon />} onClick={() => updateHandle(params.row)} label="Update" />]
                 }
             })
         }
@@ -78,15 +80,27 @@ const Employees: React.FC = () => {
     }
 
     async function submitFnForUpdate (empl:Employee){
-
-        
-        return employeesService.updateEmployee(empl)
+        let res = null;
+        const oldEmpl = firstCond.current;
+        const oldEmplCor: Employee = {
+            name: oldEmpl.name,
+            birthDate: oldEmpl.birthDate,
+            department: oldEmpl.department,
+            salary: oldEmpl.salary,
+            gender: oldEmpl.gender};
+            empl.birthDate = oldEmplCor.birthDate;
+        if (JSON.stringify(empl)!==JSON.stringify(oldEmplCor)){
+            empl.id = oldEmpl.id;
+            res= employeesService.updateEmployee(empl)
+        }
+        setOpenUpdate(false);
+        return res;
 
 
     }
 
     useEffect(() => {
-        const subscription = employeesService.getEmployees().subscribe({
+        const subscription = employeesService.getEmployees().subscribe( {
             next(emplArr: Employee[] | string) {
                 if (typeof emplArr == 'string') {
                     if (emplArr.includes('Authentication')) {
@@ -100,7 +114,7 @@ const Employees: React.FC = () => {
                     setEmployees(emplArr.map(e => ({ ...e, birthDate: new Date(e.birthDate) })));
                 }
             }
-        });
+        } );
         return () => subscription.unsubscribe();
     }, [])
     return <Box sx={{ display: 'flex', justifyContent: 'center' }}>
@@ -119,7 +133,7 @@ const Employees: React.FC = () => {
                     Update employee
                 </Typography>
                 <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                    <EmployeeFormAdding submitFn={submitFnForUpdate}/>
+                    <EmployeeFormAdding submitFn={submitFnForUpdate} firstCond={firstCond.current}/>
                 </Typography>
             </Box>
         </Modal>
